@@ -35,5 +35,5 @@ This may take some time (about 2 minutes on my PC) because it creates a lot of r
 For any of the above methods:
 
 * `match` can be a match id or match object instance
-* `achievement` can be an achievement id, name, or instanceinstance
+* `achievement` can be an achievement id, name, or instance
 * `counter` can also be a counter id, name, or instance
