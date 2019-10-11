@@ -6,13 +6,13 @@ class Player < ApplicationRecord
   validates_presence_of :name
 
   def set_counter(match, counter, value, force: false)
-    match = find_object(Match, match, field: :location)
+    match = self.class.find_object(Match, match, field: :location)
 
     unless (force || match.teams.include?(team))
       raise 'Player is not a member of participating teams'
     end
 
-    counter = find_object(Counter, counter)
+    counter = self.class.find_object(Counter, counter)
 
     player_counter = counters.find_or_initialize_by match: match, counter: counter
     player_counter.value = value
@@ -21,26 +21,14 @@ class Player < ApplicationRecord
   end
 
   def award_achievement(match, achievement, force: false)
-    match = find_object(Match, match, field: :location)
+    match = self.class.find_object(Match, match, field: :location)
 
     unless (force || match.teams.include?(team))
       raise 'Player is not a member of participating teams'
     end
 
-    achievement = find_object(Achievement, achievement)
+    achievement = self.class.find_object(Achievement, achievement)
 
     achievements.find_or_create_by! match: match, achievement: achievement
-  end
-
-  private
-  def find_object(collection, query, field: :name)
-    case query
-    when collection
-      query
-    when String, Symbol
-      collection.find_by! field => query.to_s
-    when Numeric
-      collection.find(query)
-    end
   end
 end

@@ -4,4 +4,13 @@ class Team < ApplicationRecord
     dependent: :restrict_with_exception
 
   validates_presence_of :name
+
+  def top_players(achievement, count: 5)
+    players.joins(:achievements).
+      select('players.id, players.name, count(players.id) AS counter').
+      group('id').
+      where('player_achievements.achievement_id' => self.class.find_object(Achievement, achievement).id).
+      order('count(players.id) DESC').
+      limit(count)
+  end
 end
