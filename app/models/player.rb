@@ -16,6 +16,13 @@ class Player < ApplicationRecord
       limit(count)
   end
 
+  def achieved?(match, achievement)
+    match = self.class.find_object(Match, match, field: :location)
+    achievement = self.class.find_object(Achievement, achievement)
+
+    achievements.where(match: match, achievement: achievement).any?
+  end
+
   def set_counter(match, counter, value, force: false)
     match = self.class.find_object(Match, match, field: :location)
 

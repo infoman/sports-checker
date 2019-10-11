@@ -31,6 +31,27 @@ RSpec.describe Player, type: :model do
     end
   end
 
+  describe "#achieved?" do
+    before :each do
+      @match = create :match
+      team = @match.participants.first.team
+      @player = build(:player, team: nil)
+      team.players << @player
+      team.save
+      @achievement = create :achievement, name: :made_goal, threshold: 1
+    end
+
+    it "returns false if player has no specific achievement in a match" do
+      expect(@player.achieved? @match, @achievement).to be_falsey
+    end
+
+    it "returns true if player has specific achievement in a match" do
+      @player.award_achievement @match, @achievement
+
+      expect(@player.achieved? @match, @achievement).to be_truthy
+    end
+  end
+
   describe "properly sets counters and achievements" do
     before :each do
       @counter = create :counter
