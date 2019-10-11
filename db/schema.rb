@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_11_102906) do
+ActiveRecord::Schema.define(version: 2019_10_11_223404) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -22,6 +22,7 @@ ActiveRecord::Schema.define(version: 2019_10_11_102906) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["counter_id"], name: "index_achievements_on_counter_id"
+    t.index ["name"], name: "index_achievements_on_name", unique: true
   end
 
   create_table "counters", force: :cascade do |t|
@@ -29,6 +30,7 @@ ActiveRecord::Schema.define(version: 2019_10_11_102906) do
     t.string "unit"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["name"], name: "index_counters_on_name", unique: true
   end
 
   create_table "match_participants", force: :cascade do |t|
@@ -37,6 +39,7 @@ ActiveRecord::Schema.define(version: 2019_10_11_102906) do
     t.integer "score"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["match_id", "team_id"], name: "participate_once", unique: true
     t.index ["match_id"], name: "index_match_participants_on_match_id"
     t.index ["team_id"], name: "index_match_participants_on_team_id"
   end
@@ -55,6 +58,7 @@ ActiveRecord::Schema.define(version: 2019_10_11_102906) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["achievement_id"], name: "index_player_achievements_on_achievement_id"
     t.index ["match_id"], name: "index_player_achievements_on_match_id"
+    t.index ["player_id", "match_id", "achievement_id"], name: "achieve_once", unique: true
     t.index ["player_id"], name: "index_player_achievements_on_player_id"
   end
 
@@ -67,6 +71,7 @@ ActiveRecord::Schema.define(version: 2019_10_11_102906) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["counter_id"], name: "index_player_counters_on_counter_id"
     t.index ["match_id"], name: "index_player_counters_on_match_id"
+    t.index ["player_id", "match_id", "counter_id"], name: "count_once", unique: true
     t.index ["player_id"], name: "index_player_counters_on_player_id"
   end
 
