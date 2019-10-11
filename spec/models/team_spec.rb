@@ -20,6 +20,7 @@ RSpec.describe Team, type: :model do
       matches = Match.all
 
       # award achievement to players in a controllable way
+      # each next player gets an achievement in one more match than it's predecessor
       players.each_with_index do |player, i|
         matches.sample(i).each do |match|
           player.award_achievement(match, achievement)
