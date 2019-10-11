@@ -5,6 +5,17 @@ class Player < ApplicationRecord
 
   validates_presence_of :name
 
+  scope :top, -> (achievement, count: 5) do
+    achievement = find_object(Achievement, achievement)
+
+    joins(:achievements).
+      select('players.id, players.name, count(players.id) AS counter').
+      group('id').
+      where('player_achievements.achievement_id' => achievement.id).
+      order('count(players.id) DESC').
+      limit(count)
+  end
+
   def set_counter(match, counter, value, force: false)
     match = self.class.find_object(Match, match, field: :location)
 
