@@ -52,6 +52,42 @@ RSpec.describe Player, type: :model do
     end
   end
 
+  describe "#achieved_last?" do
+    before :each do
+      teams = create_list :team, 2
+      6.times do
+        participants = teams.map do |team|
+          build(:match_participant, match: nil, team: team, score: rand(5))
+        end
+        create :match, participants: participants
+      end
+      @matches = Match.all
+      team = teams.first
+      @player = build(:player, team: nil)
+      team.players << @player
+      team.save
+      @achievement = create :achievement, name: :made_goal, threshold: 1
+    end
+
+    it "returns false if player has no specific achievement in last 5 matches" do
+      @player.award_achievement @matches.first, @achievement
+
+      expect(@player.achieved_last? @achievement).to be_falsey
+    end
+
+    it "returns true if player has specific achievement in last 5 matches" do
+      @player.award_achievement @matches.second, @achievement
+
+      expect(@player.achieved_last? @achievement).to be_truthy
+    end
+
+    it "allows match count override" do
+      @player.award_achievement @matches.first, @achievement
+
+      expect(@player.achieved_last? @achievement, match_count: 6).to be_truthy
+    end
+  end
+
   describe "properly sets counters and achievements" do
     before :each do
       @counter = create :counter

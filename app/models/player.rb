@@ -23,6 +23,13 @@ class Player < ApplicationRecord
     achievements.where(match: match, achievement: achievement).any?
   end
 
+  def achieved_last?(achievement, match_count: 5)
+    achievement = self.class.find_object(Achievement, achievement)
+    matches = team.matches.order(created_at: :desc).limit(match_count)
+
+    achievements.where(match: matches, achievement: achievement).any?
+  end
+
   def set_counter(match, counter, value, force: false)
     match = self.class.find_object(Match, match, field: :location)
 
