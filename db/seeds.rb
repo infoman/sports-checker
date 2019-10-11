@@ -132,7 +132,7 @@ if Match.count == 0
 end
 
 if Counter.count == 0 && Achievement.count == 0
-  ActiveRecord::Migration.say_with_time 'Populating counters and achievements…' do
+  ActiveRecord::Migration.say_with_time 'Populating counters and achievements definitions…' do
     ActiveRecord::Base.transaction do
       counters = Counter.create([
         { name: 'goals' },
