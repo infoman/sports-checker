@@ -9,4 +9,14 @@ class PlayerCounter < ApplicationRecord
 
   delegate :name, :unit, to: :counter, prefix: true
   delegate :name, to: :player, prefix: true
+
+  after_save :award_achievements
+
+  private
+  def award_achievements
+    valid_achievements = counter.achievements.where('threshold <= ?', value)
+    valid_achievements.each do |achievement|
+      player.award_achievement(match, achievement, force: true)
+    end
+  end
 end
