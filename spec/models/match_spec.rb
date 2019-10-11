@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Match, type: :model do
-  it { should have_many(:participants).class_name('MatchParticipant') }
+  it { should have_many(:participants).class_name('MatchParticipant').dependent(:destroy) }
   it { should have_many(:teams).through(:participants) }
 
   it { should validate_presence_of(:location) }

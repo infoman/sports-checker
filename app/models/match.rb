@@ -1,5 +1,5 @@
 class Match < ApplicationRecord
-  has_many :participants, class_name: 'MatchParticipant'
+  has_many :participants, class_name: 'MatchParticipant', dependent: :destroy
   has_many :teams, through: :participants, inverse_of: :matches
 
   validates_presence_of :location
