@@ -122,10 +122,12 @@ if Match.count == 0
       teams = Team.all
 
       locations.each do |location|
-        participants = teams.sample(2).map do |team|
-          MatchParticipant.new team: team, score: rand(10)
+        rand(5).times do
+          participants = teams.sample(2).map do |team|
+            MatchParticipant.new team: team, score: rand(10)
+          end
+          Match.create! location: location, participants: participants, created_at: rand(1.year).seconds.ago
         end
-        Match.create! location: location, participants: participants, created_at: rand(1.year).seconds.ago
       end
     end
   end
