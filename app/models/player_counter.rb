@@ -14,9 +14,8 @@ class PlayerCounter < ApplicationRecord
 
   private
   def award_achievements
-    valid_achievements = counter.achievements.where('threshold <= ?', value)
-    valid_achievements.each do |achievement|
-      player.award_achievement(match, achievement, force: true)
+    counter.achievements.each do |achievement|
+      player.award_achievement(match, achievement, force: true) if value >= achievement.threshold
     end
   end
 end

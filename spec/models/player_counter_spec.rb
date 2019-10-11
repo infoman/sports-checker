@@ -13,7 +13,7 @@ RSpec.describe PlayerCounter, type: :model do
   describe "after_save achievements check" do
     before :each do
       @counter = create :player_counter, value: 0
-      create :achievement, counter: @counter.counter, threshold: 1.11
+      @counter.counter.achievements << build(:achievement, counter: nil, threshold: 1.11)
       @player = @counter.player
     end
 
