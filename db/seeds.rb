@@ -172,3 +172,34 @@ if Counter.count == 0 && Achievement.count == 0
     end
   end
 end
+
+if PlayerCounter.count == 0 && PlayerAchievement.count == 0
+  ActiveRecord::Migration.say_with_time 'Populating players\' counters and achievements…' do
+    ActiveRecord::Base.transaction do
+      Match.all.includes(participants: {team: :players}).each do |match|
+        match.participants.each do |participant|
+          # Setting goals
+          goal_counters = {}
+          participant.score.times do
+            player = participant.team.players.sample
+
+            goal_counters[player] ||= 0
+            goal_counters[player] += 1
+          end
+
+          goal_counters.each do |player, goals|
+            player.set_counter(match, :goals, goals)
+          end
+
+          # Setting other counters
+          participant.team.players.each do |player|
+            player.set_counter match, :assists, rand(participant.score)
+            player.set_counter match, :passes, rand(100)
+            player.set_counter match, :successful_passes, rand(100)
+            player.set_counter match, :running_distance, rand(50)
+          end
+        end
+      end
+    end
+  end
+end
