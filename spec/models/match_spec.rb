@@ -10,7 +10,7 @@ RSpec.describe Match, type: :model do
   # it { should validate_length_of(:participants).is_equal_to(2) }
   describe "validates that a match has 2 participants" do
     before :each do
-      @match = build :match
+      @match = build :match, participants: []
     end
 
     it "should not accept empty matches" do
